@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Esercizio
+   </title>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+   <script src="https://assets.incode.it/gsap-business/minified/SplitText.min.js"></script>
+
+   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script src="app.js"></script>
+
+   
+   <style>
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 10vw; 
+      background-color: yellow;
+      margin-left: 2px;
+      vertical-align: top;
+    }
+
+    section {
+      transition: background-color 0.6s ease;
+      box-sizing: border-box;
+    }
+
+    #footer h4 {
+      transform-origin: center;
+      display: inline-block;
+    }
+
+   </style>
+</head>
+
+
+<body>
+
+
+<section id="section1" class="flex justify-center items-center h-screen bg-[#9f0035]">
+  <div class="inner">
+    <div class="flex justify-center gap-10 items-center">
+      <button class="text-[0.9vw] mt-5 font-sans text-yellow-200">HELLO! VIEW MY STACK</button>
+    </div>
+    <div class="inline-flex items-center justify-center mt-40 mb-40">
+      <h1 class="text-[10vw] text-[#e2004b]">I'm a_</h1><div class="typing-text font-bold min-height-12 text-[10vw] font-sans text-[#e2004b]"></div>
+      <div class="cursor"></div>
+    </div>
+    <div class="flex justify-center gap-50 items-center mb-5">
+      <a href="#headline"class="py-[5px] px-[10px] border outline-yellow-200 rounded-[10px] text-[0.9vw] mt-5 font-sans text-yellow-200 shadow-lg hover:bg-yellow-100/50 transition-colors duration-300">My Creative Toolbox ▼</a>
+    </div>
+    
+  </div>
+</section>
+
+
+<section id="headline"class="flex items-center justify-center h-screen leading-tight origin-center bg-[#303f9f]">
+      <div>
+        <h3 class="flex items-center justify-center text-[5vw] text-[#3f51b5]">Illustrator</h3>
+        <h3 class="flex items-center justify-center text-[5vw] text-[#3f51b5]">Indesign</h3>
+        <h3 class="flex items-center justify-center text-[5vw] text-[#3f51b5]">Photoshop</h3>
+        <h3 class="flex items-center justify-center text-[5vw] text-[#3f51b5]">Figma</h3>
+      </div>
+</section>
+
+<section id="footer" class="flex justify-center items-center h-screen leading-tight mt-[-1px] bg-[#303f9f] align-baseline">
+  <h4 class="text-[30vw] text-[#3f51b5] text-sans origin-center">✺</h4>
+  <div class="absolute bottom-0 left-0 w-full flex justify-between items-baseline px-10 align-baseline mb-10">
+    <div class="text-sans text-[8vw] text-[#3f51b5] flex items-baseline leading-none">thank you!</div>
+    <div class="flex justify-between gap-10 items-baseline">
+      <a href="#section1" class="py-[5px] px-[10px] border outline-yellow-200 rounded-[10px] text-[0.9vw] font-sans text-yellow-200 shadow-lg hover:bg-yellow-100/50 transition-colors duration-300 flex items-baseline leading-none">back to top ▲</a>
+      <div class="font-sans text-yellow-200 text-[1.5vw] flex items-baseline leading-none">♡</div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<script>
+  gsap.registerPlugin(TextPlugin);
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(SplitText);
+
+
+  const texts = ["girl", "hippie", "designer"];
+  const h1 = document.querySelector('h1');
+  const typingText = document.querySelector('.typing-text');
+  const cursor = document.querySelector('.cursor');
+  const section = document.querySelector('section');
+  const textcolor = ["rgb(226, 0, 75)", "rgb(0, 150, 136)", "rgb(63, 81, 181)"];
+  const backgroundColors = ["rgb(159, 0, 53)", "rgb(0, 105, 97)", "rgb(48, 63, 159)"];
+
+  const tl = gsap.timeline({
+    repeat: -1, 
+    repeatDelay: 1,
+    delay: 0.5
+  });
+
+  texts.forEach((text, index) => {
+    tl.to(typingText, { duration: 1, text: text, ease: "none" })
+      .to([typingText, h1], { duration: 1, color: textcolor[index], ease: "none" }, "<")
+      .to(section, { duration: 1, backgroundColor: backgroundColors[index], ease: "out"}, "<")
+      .to({}, { duration: 1 })
+      .to(typingText, { duration: 1, text: {value: "", rtl: true}, ease: "none" });
+  });
+
+
+
+
+  gsap.to(cursor, { opacity: 0, repeat: -1, yoyo: true, duration: 0.5});
+
+  (function() {
+    const lines = gsap.utils.toArray('#headline h3');
+
+    gsap.set(lines, { y: 0, opacity: 0.45, scale: 0.9 });
+
+    const perLine = 1.2;
+    const total = perLine * lines.length;
+
+    const tlHeadline = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#headline',
+        start: 'top top',
+        end: `+=${Math.round(total * 1000)}`,
+        scrub: true,
+        pin: true,
+/*         markers: true */
+      }
+    });
+
+    lines.forEach((el) => {
+      tlHeadline.to(el, { scale: 2, opacity: 1, fontWeight: 700, duration: 0.5, ease: 'out' })
+                .to(el, { scale: 1, opacity: 0.5, fontWeight: 400, duration: 0.5, ease: 'out'});
+    });
+  })();
+
+
+
+    gsap.utils.toArray("#footer").forEach((section, index) => {
+    const h1 = section.querySelector("h4");
+    const tl2 = gsap.timeline({
+      scrollTrigger: {
+      trigger: section,
+/*       markers: true, */
+      scrub: true,
+      pin: true 
+            }
+      });
+      tl2.from(h1, { scale: 0.1, opacity: 0, duration: 6 });
+      tl2.to(h1, { duration: 6, opacity: 1, rotation: "+=360", scale: 5 }); 
+      tl2.to(h1, { scale: 0.2, opacity: 0, duration: 6 }, "+=1");
+
+   });
+
+</script>
+</body>
+</html>
